@@ -4,6 +4,7 @@
 #include "Num_parser.h"
 #include <iostream>
 using namespace std;
+#define DEBUG(X) cout << #X << endl;
 
 namespace{
   int ck1 = -1, ck2 = -1, ck3 = -1;
@@ -26,8 +27,10 @@ void computa_param(const char* nome);
 
 //###################################################
 int main(){
+  DEBUG(chegou em main);
   ifstream ifs("multiplas_funcoes.txt"); //verifica a existência do arquivo
   if(ifs.fail()){
+    DEBUG(chegou em funcao_txt);
     func_flag = true;
     mult_flag = false;
     le_doc("funcao.txt");             //variaveis.txt é criado por hipatia para desenhar o gráfico com as vars
@@ -36,6 +39,7 @@ int main(){
     else if(ck2==1) computa_polar("coordenadas.txt");    //para sua leitura e computação normal de dados
     else if(ck3==1) computa_param("coordenadas.txt");
   } else{ //MODO DE LEITURA MÚLTIPLA
+    DEBUG(chegou em !funcao_txt);
     func_flag = false;
     mult_flag = true;
     ifs.close();  //vai ser reaberto dentro da função
@@ -47,8 +51,10 @@ int main(){
 //###################################################
 
 void le_multi_doc(const char* nome){ //MODO DE LEITURA MÚLTIPLA
+
+  DEBUG(chegou em le_mult_doc);
   ifstream ifs(nome);
-  ofstream ofs("coordenadas.txt");
+  ofstream ofs("coordenadas.txt", ios_base::out|ios_base::app);
   //ofstream ofs("coordenadas.txt", ios_base::out|ios_base::app); //
   string entrada = "";
   int contador = 0;
@@ -71,7 +77,9 @@ void le_multi_doc(const char* nome){ //MODO DE LEITURA MÚLTIPLA
   ofs.close();
   ifs.close();
 }
+
 void le_doc(const char* nome){
+  DEBUG(chegou em le_doc);
   ifstream ifs(nome); //variaveis.txt
   string entrada = "";
   int contador = 0;
@@ -84,6 +92,7 @@ void le_doc(const char* nome){
 }
 
 void passa_valores(){
+  DEBUG(chegou em passa_valores);
   ck1 = stoi(arr[0]);
   ck2 = stoi(arr[1]);
   ck3 = stoi(arr[2]);
@@ -101,13 +110,19 @@ void passa_valores(){
   int contador = 6;
   istringstream is(arr[6]);
   string pass = "";
-  while(is>>pass) arr[contador++] = pass;
+  while(is>>pass){ arr[contador++] = pass;}
 
-  if(ck1==1 or ck2==1){
-    inferior = stod(arr[5]);
-    superior = stod(arr[6]);
+  if(func_flag==true){ //funcionamento para funções regulares
+    if(ck1==1 or ck2==1){
+      inferior = stod(arr[5]);
+      superior = stod(arr[6]);
+    }
+    else if(ck3==1){
+      inferior = stod(arr[6]);
+      superior = stod(arr[7]);
+    }
   }
-  else if(ck3==1){
+  if(mult_flag==true){  //funcionamento para funções múltiplas
     inferior = stod(arr[6]);
     superior = stod(arr[7]);
   }
@@ -125,7 +140,9 @@ string muda_var(string eq, char var, double valor){
   }
   return res;
 }
+
 void computa_cart(const char* nome){
+  DEBUG(chegou em computa_cart);
   fstream ofs;
   if(func_flag==true) ofs.open(nome, ios::out);
   if(mult_flag==true) ofs.open(nome, ios::out|ios::app);
@@ -146,6 +163,7 @@ void computa_cart(const char* nome){
 }
 
 void computa_polar(const char* nome){
+  DEBUG(chegou em computa_polar);
   fstream ofs;
   if(func_flag==true) ofs.open(nome, ios::out);
   if(mult_flag==true) ofs.open(nome, ios::out|ios::app);
@@ -166,6 +184,7 @@ void computa_polar(const char* nome){
   ofs.close();
 }
 void computa_param(const char* nome){
+  DEBUG(chegou em computa_param);
   fstream ofs;
   if(func_flag==true) ofs.open(nome, ios::out);
   if(mult_flag==true) ofs.open(nome, ios::out|ios::app);
