@@ -26,12 +26,12 @@ public:
   ~Mult_Func(){}
   Fl_Input* entrada = new Fl_Input(80, 10, 320, 25, "Equações: ");
   Fl_Button* adicionar = new Fl_Button(410, 10, 70, 25, "Adicionar");
-  Fl_Button* desenhar = new Fl_Button(230, 210, 70, 25, "Desenhar");
-  Fl_Text_Display* saida = new Fl_Text_Display(10, 45, 470, 150);
+  Fl_Button* desenhar = new Fl_Button(230, 85, 70, 25, "Desenhar");
+  Fl_Text_Display* saida = new Fl_Text_Display(10, 45, 470, 30);
   friend void adicionar_cb();
 };
 
-Mult_Func funcs(500, 250, 500, 250);
+Mult_Func funcs(500, 250, 500, 120);
 
 void parser_dados();
 std::string parser_limite();
@@ -52,7 +52,8 @@ int main(){
 //##############################################################################
 
 void adicionar_cb(){
-  valores = valores + "\n" + std::string(funcs.entrada->value());
+  //valores = valores + "\n" + std::string(funcs.entrada->value());
+  valores = std::string(funcs.entrada->value());
   funcs.entrada->value(0);
   Fl_Text_Buffer* buff = new Fl_Text_Buffer(100);
   buff->text(valores.c_str());

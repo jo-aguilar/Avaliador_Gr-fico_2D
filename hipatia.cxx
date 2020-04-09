@@ -9,7 +9,6 @@
 #include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Output.H>
 #include <string>
 #include <iostream>
@@ -64,7 +63,9 @@ public:
     Grafico(const Janela& jan):
       Fl_Widget(10, 30, jan.w()-20, jan.h()-200, 0), centro_x(int(w())/2), centro_y(int(h())/2){}
     ~Grafico(){}
-    Fl_Button* gerar = new Fl_Button(490, 615, 110, 25, "&Gerar gráfico");
+    Fl_Button* gerar = new Fl_Button(430, 615, 110, 25, "Gerar gráfico");
+    Fl_Button* mult = new Fl_Button(300, 615, 120, 25, "Múltiplas funções");
+    Fl_Button* limpar = new Fl_Button(550, 615, 100, 25, "Limpar");
     void passa_valores(const Janela& jan);
     void eixo_x(int pos1, int x_pos, int y_pos);
     void eixo_y(int pos2, int x_pos, int y_pos);
@@ -85,28 +86,21 @@ void muda1();
 void muda2();
 void muda3();
 void grafico_cb();
+void limpar_cb();
 
-Fl_Menu_Item menu[] = {
-  {"Janela", 0, 0, 0, FL_SUBMENU},
-    {"Múltiplas Equações", 0, (Fl_Callback*)mult_f_cb, 0},
-    {"&Fechar", FL_CTRL + 'f', (Fl_Callback*)fechar_cb, 0},
-    {0},
-  {0}
-};
 
 Janela janela(1025, 650, "Hipatia - Avaliador Gráfico de Funções");
   Janela::Grafico graf(janela);
-    Fl_Menu_Bar* barra = new Fl_Menu_Bar(2, 1, 1025, 20);
 
 //#####################################################################
 int main(){
   atexit(exit_handle1);
-  barra->copy(menu);
   Janela::Grafico graf(janela);
   janela.check1->callback((Fl_Callback*)muda1);
   janela.check2->callback((Fl_Callback*)muda2);
   janela.check3->callback((Fl_Callback*)muda3);
   graf.gerar->callback((Fl_Callback*)grafico_cb);
+  graf.mult->callback((Fl_Callback*)mult_f_cb);
   janela.resizable(janela);
   janela.end();
   janela.show();
@@ -281,15 +275,16 @@ void Janela::Grafico::desenha_func(){
     else if(saida=="verde") {fl_color(FL_GREEN);}
     else if(saida=="magenta") {fl_color(FL_MAGENTA);}
     else if(saida=="azul") {fl_color(FL_BLUE);}
-
-    while(ss>>extrator){
-        array[count_array++] = stod(extrator);
-      }
-      fl_line(centrox + escala*array[0],
-        centroy - escala*array[1],
-        centrox + escala*array[2],
-        centroy - escala*array[3]);
-   }
+    else{
+      while(ss>>extrator){
+          array[count_array++] = stod(extrator);
+        }
+        fl_line(centrox + escala*array[0],
+          centroy - escala*array[1],
+          centrox + escala*array[2],
+          centroy - escala*array[3]);
+     }
+    }
 }
 int Janela::Grafico::handle(int e){
     int event = Fl_Widget::handle(e);
